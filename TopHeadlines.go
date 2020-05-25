@@ -7,9 +7,7 @@ import (
 	"strconv"
 )
 
-const baseUrl string = "https://newsapi.org/v2"
-
-type Options struct {
+type HeadlineOptions struct {
 	Country  string
 	Category string
 	Sources  string
@@ -19,13 +17,13 @@ type Options struct {
 	ApiKey   string
 }
 
-func GetTopHeadlines(options Options) ([]byte, error) {
+func GetTopHeadlines(options HeadlineOptions) ([]byte, error) {
 
 	if len(options.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
-	response, err := http.Get(buildQuery(options))
+	response, err := http.Get(buildTopHeadlinesQuery(options))
 	if err != nil {
 		return nil, err
 	}
@@ -38,10 +36,10 @@ func GetTopHeadlines(options Options) ([]byte, error) {
 	return data, nil
 }
 
-func buildQuery(options Options) string {
+func buildTopHeadlinesQuery(options HeadlineOptions) string {
 	query := baseUrl + "/top-headlines?apiKey=" + options.ApiKey
 
-	if (Options{}) == options {
+	if (HeadlineOptions{}) == options {
 		return query
 	}
 	// see if it's possible to keep it DRY by adding a for loop
