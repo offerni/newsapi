@@ -17,13 +17,13 @@ type Headlines struct {
 	ApiKey   string
 }
 
-func GetTopHeadlines(options Headlines) ([]byte, error) {
+func GetTopHeadlines(headlines Headlines) ([]byte, error) {
 
-	if len(options.ApiKey) == 0 {
+	if len(headlines.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
-	response, err := http.Get(options.buildQuery())
+	response, err := http.Get(headlines.buildQuery())
 	if err != nil {
 		return nil, err
 	}

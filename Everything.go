@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-type EverythingOptions struct {
+type Everything struct {
 	KeywordBody    string
 	KeywordTitle   string
 	Sources        string
@@ -22,13 +22,13 @@ type EverythingOptions struct {
 	ApiKey         string
 }
 
-func GetEverything(everythingOptions EverythingOptions) ([]byte, error) {
+func GetEverything(everything Everything) ([]byte, error) {
 
-	if len(everythingOptions.ApiKey) == 0 {
+	if len(everything.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
-	response, err := http.Get(buildEverythingQuery(everythingOptions))
+	response, err := http.Get(everything.buildQuery())
 	if err != nil {
 		return nil, err
 	}
@@ -41,45 +41,45 @@ func GetEverything(everythingOptions EverythingOptions) ([]byte, error) {
 	return data, nil
 }
 
-func buildEverythingQuery(everythingOptions EverythingOptions) string {
-	query := baseUrl + "/everything?apiKey=" + everythingOptions.ApiKey
+func (e Everything) buildQuery() string {
+	query := baseUrl + "/everything?apiKey=" + e.ApiKey
 
-	if (EverythingOptions{}) == everythingOptions {
+	if (Everything{}) == e {
 		return query
 	}
 	// see if it's possible to keep it DRY by adding a for loop
-	if len(everythingOptions.KeywordBody) > 0 {
-		query += "&q=" + everythingOptions.KeywordBody
+	if len(e.KeywordBody) > 0 {
+		query += "&q=" + e.KeywordBody
 	}
-	if len(everythingOptions.KeywordTitle) > 0 {
-		query += "&qInTitle=" + everythingOptions.KeywordTitle
+	if len(e.KeywordTitle) > 0 {
+		query += "&qInTitle=" + e.KeywordTitle
 	}
-	if len(everythingOptions.Sources) > 0 {
-		query += "&sources=" + everythingOptions.Sources
+	if len(e.Sources) > 0 {
+		query += "&sources=" + e.Sources
 	}
-	if len(everythingOptions.Domains) > 0 {
-		query += "&domains=" + everythingOptions.Domains
+	if len(e.Domains) > 0 {
+		query += "&domains=" + e.Domains
 	}
-	if len(everythingOptions.ExcludeDomains) > 0 {
-		query += "&excludeDomains=" + everythingOptions.ExcludeDomains
+	if len(e.ExcludeDomains) > 0 {
+		query += "&excludeDomains=" + e.ExcludeDomains
 	}
-	if len(everythingOptions.FromDate) > 0 {
-		query += "&from=" + everythingOptions.FromDate
+	if len(e.FromDate) > 0 {
+		query += "&from=" + e.FromDate
 	}
-	if len(everythingOptions.ToDate) > 0 {
-		query += "&to=" + everythingOptions.ToDate
+	if len(e.ToDate) > 0 {
+		query += "&to=" + e.ToDate
 	}
-	if len(everythingOptions.Language) > 0 {
-		query += "&language=" + everythingOptions.Language
+	if len(e.Language) > 0 {
+		query += "&language=" + e.Language
 	}
-	if len(everythingOptions.SortBy) > 0 {
-		query += "&sortBy=" + everythingOptions.SortBy
+	if len(e.SortBy) > 0 {
+		query += "&sortBy=" + e.SortBy
 	}
-	if everythingOptions.PageSize > 0 {
-		query += "&pageSize=" + strconv.Itoa(everythingOptions.PageSize)
+	if e.PageSize > 0 {
+		query += "&pageSize=" + strconv.Itoa(e.PageSize)
 	}
-	if everythingOptions.Page > 0 {
-		query += "&page=" + strconv.Itoa(everythingOptions.Page)
+	if e.Page > 0 {
+		query += "&page=" + strconv.Itoa(e.Page)
 	}
 
 	return query
