@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-type HeadlineOptions struct {
+type Headlines struct {
 	Country  string
 	Category string
 	Sources  string
@@ -17,13 +17,13 @@ type HeadlineOptions struct {
 	ApiKey   string
 }
 
-func GetTopHeadlines(options HeadlineOptions) ([]byte, error) {
+func GetTopHeadlines(options Headlines) ([]byte, error) {
 
 	if len(options.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
-	response, err := http.Get(buildTopHeadlinesQuery(options))
+	response, err := http.Get(options.buildQuery())
 	if err != nil {
 		return nil, err
 	}
@@ -36,30 +36,30 @@ func GetTopHeadlines(options HeadlineOptions) ([]byte, error) {
 	return data, nil
 }
 
-func buildTopHeadlinesQuery(options HeadlineOptions) string {
-	query := baseUrl + "/top-headlines?apiKey=" + options.ApiKey
+func (h Headlines) buildQuery() string {
+	query := baseUrl + "/top-headlines?apiKey=" + h.ApiKey
 
-	if (HeadlineOptions{}) == options {
+	if h == (Headlines{}) {
 		return query
 	}
 	// see if it's possible to keep it DRY by adding a for loop
-	if len(options.Country) > 0 {
-		query += "&country=" + options.Country
+	if len(h.Country) > 0 {
+		query += "&country=" + h.Country
 	}
-	if len(options.Category) > 0 {
-		query += "&category=" + options.Category
+	if len(h.Category) > 0 {
+		query += "&category=" + h.Category
 	}
-	if len(options.Sources) > 0 {
-		query += "&sources=" + options.Sources
+	if len(h.Sources) > 0 {
+		query += "&sources=" + h.Sources
 	}
-	if len(options.Keyword) > 0 {
-		query += "&q=" + options.Keyword
+	if len(h.Keyword) > 0 {
+		query += "&q=" + h.Keyword
 	}
-	if options.PageSize > 0 {
-		query += "&pageSize=" + strconv.Itoa(options.PageSize)
+	if h.PageSize > 0 {
+		query += "&pageSize=" + strconv.Itoa(h.PageSize)
 	}
-	if options.Page > 0 {
-		query += "&page=" + strconv.Itoa(options.Page)
+	if h.Page > 0 {
+		query += "&page=" + strconv.Itoa(h.Page)
 	}
 
 	return query
