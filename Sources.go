@@ -6,20 +6,20 @@ import (
 	"net/http"
 )
 
-type SourcesOptions struct {
+type Sources struct {
 	Category string
 	Language string
 	Country  string
 	ApiKey   string
 }
 
-func GetSources(sourcesOptions SourcesOptions) ([]byte, error) {
+func GetSources(sources Sources) ([]byte, error) {
 
-	if len(sourcesOptions.ApiKey) == 0 {
+	if len(sources.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
-	response, err := http.Get(buildSourcesQuery(sourcesOptions))
+	response, err := http.Get(sources.buildQuery())
 	if err != nil {
 		return nil, err
 	}
@@ -32,21 +32,21 @@ func GetSources(sourcesOptions SourcesOptions) ([]byte, error) {
 	return data, nil
 }
 
-func buildSourcesQuery(sourcesOptions SourcesOptions) string {
-	query := baseUrl + "/sources?apiKey=" + sourcesOptions.ApiKey
+func (s Sources) buildQuery() string {
+	query := baseUrl + "/sources?apiKey=" + s.ApiKey
 
-	if (SourcesOptions{}) == sourcesOptions {
+	if (s == Sources{}) {
 		return query
 	}
 	// see if it's possible to keep it DRY by adding a for loop
-	if len(sourcesOptions.Category) > 0 {
-		query += "&category=" + sourcesOptions.Category
+	if len(s.Category) > 0 {
+		query += "&category=" + s.Category
 	}
-	if len(sourcesOptions.Language) > 0 {
-		query += "&language=" + sourcesOptions.Language
+	if len(s.Language) > 0 {
+		query += "&language=" + s.Language
 	}
-	if len(sourcesOptions.Country) > 0 {
-		query += "&country=" + sourcesOptions.Country
+	if len(s.Country) > 0 {
+		query += "&country=" + s.Country
 	}
 
 	return query

@@ -44,7 +44,7 @@ func GetEverything(everything Everything) ([]byte, error) {
 func (e Everything) buildQuery() string {
 	query := baseUrl + "/everything?apiKey=" + e.ApiKey
 
-	if (Everything{}) == e {
+	if e == (Everything{}) {
 		return query
 	}
 	// see if it's possible to keep it DRY by adding a for loop
