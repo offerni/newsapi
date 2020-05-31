@@ -18,43 +18,19 @@ type Headlines struct {
 	ApiKey   string
 }
 
-type HeadlineResponse struct {
-	Status       string    `json:"status"`
-	TotalResults int       `json:"totalResults"`
-	Articles     []Article `json:"articles"`
-	Code         string    `json:"code"`
-	Message      string    `json:"message"`
-}
-
-type Article struct {
-	Source      ArticleSource `json:"source"`
-	Author      string        `json:"author"`
-	Title       string        `json:"title"`
-	Description string        `json:"description"`
-	Url         string        `json:"url"`
-	UrlToImage  string        `json:"urlToImage"`
-	PublishedAt string        `json:"publishedAt"`
-	Content     string        `json:"content"`
-}
-
-type ArticleSource struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
-}
-
-func GetTopHeadlines(headlines Headlines) (HeadlineResponse, error) {
+func GetTopHeadlines(headlines Headlines) (HeadlinesResponse, error) {
 	if len(headlines.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
 	response, err := http.Get(headlines.buildQuery())
 	if err != nil { // response error handling
-		return HeadlineResponse{}, err
+		return HeadlinesResponse{}, err
 	}
 
-	data, readErr := ioutil.ReadAll(response.Body)
-	headlinesResponse := HeadlineResponse{}
-	headlinesErr := json.Unmarshal(data, &headlinesResponse)
+	body, readErr := ioutil.ReadAll(response.Body)
+	headlinesResponse := HeadlinesResponse{}
+	headlinesErr := json.Unmarshal(body, &headlinesResponse)
 
 	if readErr != nil {
 		return headlinesResponse, readErr
