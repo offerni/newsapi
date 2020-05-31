@@ -1,6 +1,7 @@
 package newsApiSdk
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -17,23 +18,57 @@ type Headlines struct {
 	ApiKey   string
 }
 
-func GetTopHeadlines(headlines Headlines) ([]byte, error) {
+type HeadlineResponse struct {
+	Status       string    `json:"status"`
+	TotalResults int       `json:"totalResults"`
+	Articles     []Article `json:"articles"`
+	Code         string    `json:"code"`
+	Message      string    `json:"message"`
+}
 
+type Article struct {
+	Source      ArticleSource `json:"source"`
+	Author      string        `json:"author"`
+	Title       string        `json:"title"`
+	Description string        `json:"description"`
+	Url         string        `json:"url"`
+	UrlToImage  string        `json:"urlToImage"`
+	PublishedAt string        `json:"publishedAt"`
+	Content     string        `json:"content"`
+}
+
+type ArticleSource struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+func GetTopHeadlines(headlines Headlines) (HeadlineResponse, error) {
 	if len(headlines.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
 	response, err := http.Get(headlines.buildQuery())
-	if err != nil {
-		return nil, err
+	if err != nil { // response error handling
+		return HeadlineResponse{}, err
 	}
 
-	data, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
+	data, readErr := ioutil.ReadAll(response.Body)
+	headlinesResponse := HeadlineResponse{}
+	headlinesErr := json.Unmarshal(data, &headlinesResponse)
+
+	if readErr != nil {
+		return headlinesResponse, readErr
 	}
 
-	return data, nil
+	if headlinesErr != nil {
+		return headlinesResponse, headlinesErr
+	}
+
+	if headlinesResponse.Status == "error" {
+		return headlinesResponse, headlinesErr
+	}
+
+	return headlinesResponse, headlinesErr
 }
 
 func (h Headlines) buildQuery() string {
