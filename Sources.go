@@ -1,4 +1,4 @@
-package newsApiSdk
+package newsapi
 
 import (
 	"encoding/json"

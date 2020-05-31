@@ -1,4 +1,4 @@
-package newsApiSdk
+package newsapi
 
 // Shared between all endpoints
 const baseUrl string = "https://newsapi.org/v2"
@@ -17,8 +17,4 @@ type Article struct {
 type ArticleSource struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
-}
-
-func main() {
-
 }
