@@ -18,6 +18,14 @@ type Headlines struct {
 	ApiKey   string
 }
 
+type HeadlinesResponse struct {
+	Status       string    `json:"status"`
+	TotalResults int       `json:"totalResults"`
+	Articles     []Article `json:"articles"`
+	Code         string    `json:"code"`
+	Message      string    `json:"message"`
+}
+
 func GetTopHeadlines(headlines Headlines) (HeadlinesResponse, error) {
 	if len(headlines.ApiKey) == 0 {
 		fmt.Println("Missing api key")
@@ -29,12 +37,13 @@ func GetTopHeadlines(headlines Headlines) (HeadlinesResponse, error) {
 	}
 
 	body, readErr := ioutil.ReadAll(response.Body)
-	headlinesResponse := HeadlinesResponse{}
-	headlinesErr := json.Unmarshal(body, &headlinesResponse)
 
 	if readErr != nil {
-		return headlinesResponse, readErr
+		return HeadlinesResponse{}, readErr
 	}
+
+	headlinesResponse := HeadlinesResponse{}
+	headlinesErr := json.Unmarshal(body, &headlinesResponse)
 
 	if headlinesErr != nil {
 		return headlinesResponse, headlinesErr
@@ -44,7 +53,7 @@ func GetTopHeadlines(headlines Headlines) (HeadlinesResponse, error) {
 		return headlinesResponse, headlinesErr
 	}
 
-	return headlinesResponse, headlinesErr
+	return headlinesResponse, nil
 }
 
 func (h Headlines) buildQuery() string {

@@ -1,6 +1,7 @@
 package newsApiSdk
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -22,7 +23,15 @@ type Everything struct {
 	ApiKey         string
 }
 
-func GetEverything(everything Everything) ([]byte, error) {
+type EverythingResponse struct {
+	Status       string    `json:"status"`
+	TotalResults int       `json:"totalResults"`
+	Articles     []Article `json:"articles"`
+	Code         string    `json:"code"`
+	Message      string    `json:"message"`
+}
+
+func GetEverything(everything Everything) (EverythingResponse, error) {
 
 	if len(everything.ApiKey) == 0 {
 		fmt.Println("Missing api key")
@@ -30,15 +39,26 @@ func GetEverything(everything Everything) ([]byte, error) {
 
 	response, err := http.Get(everything.buildQuery())
 	if err != nil {
-		return nil, err
+		return EverythingResponse{}, err
 	}
 
-	data, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
+	body, readErr := ioutil.ReadAll(response.Body)
+	if readErr != nil {
+		return EverythingResponse{}, readErr
 	}
 
-	return data, nil
+	everythingResponse := EverythingResponse{}
+	everythingErr := json.Unmarshal(body, &everythingResponse)
+
+	if everythingErr != nil {
+		return everythingResponse, everythingErr
+	}
+
+	if everythingResponse.Status == "error" {
+		return everythingResponse, everythingErr
+	}
+
+	return everythingResponse, nil
 }
 
 func (e Everything) buildQuery() string {

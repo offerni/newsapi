@@ -43,14 +43,15 @@ func GetSources(sources Sources) (SourcesResponse, error) {
 	}
 
 	body, readErr := ioutil.ReadAll(response.Body)
+
+	if readErr != nil {
+		return SourcesResponse{}, readErr
+	}
+
 	sourcesResponse := SourcesResponse{}
 	sourcesErr := json.Unmarshal(body, &sourcesResponse)
 
 	if sourcesErr != nil {
-		return sourcesResponse, sourcesErr
-	}
-
-	if readErr != nil {
 		return sourcesResponse, sourcesErr
 	}
 

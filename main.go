@@ -3,14 +3,6 @@ package newsApiSdk
 // Shared between all endpoints
 const baseUrl string = "https://newsapi.org/v2"
 
-type HeadlinesResponse struct {
-	Status       string    `json:"status"`
-	TotalResults int       `json:"totalResults"`
-	Articles     []Article `json:"articles"`
-	Code         string    `json:"code"`
-	Message      string    `json:"message"`
-}
-
 type Article struct {
 	Source      ArticleSource `json:"source"`
 	Author      string        `json:"author"`
