@@ -23,15 +23,15 @@ type Everything struct {
 	ApiKey         string
 }
 
-type EverythingResponse struct {
+type everythingResponse struct {
 	Status       string    `json:"status"`
 	TotalResults int       `json:"totalResults"`
-	Articles     []Article `json:"articles"`
+	Articles     []article `json:"articles"`
 	Code         string    `json:"code"`
 	Message      string    `json:"message"`
 }
 
-func GetEverything(everything Everything) (EverythingResponse, error) {
+func GetEverything(everything Everything) (everythingResponse, error) {
 
 	if len(everything.ApiKey) == 0 {
 		fmt.Println("Missing api key")
@@ -39,15 +39,15 @@ func GetEverything(everything Everything) (EverythingResponse, error) {
 
 	response, err := http.Get(everything.buildQuery())
 	if err != nil {
-		return EverythingResponse{}, err
+		return everythingResponse{}, err
 	}
 
 	body, readErr := ioutil.ReadAll(response.Body)
 	if readErr != nil {
-		return EverythingResponse{}, readErr
+		return everythingResponse{}, readErr
 	}
 
-	everythingResponse := EverythingResponse{}
+	everythingResponse := everythingResponse{}
 	everythingErr := json.Unmarshal(body, &everythingResponse)
 
 	if everythingErr != nil {
@@ -67,7 +67,6 @@ func (e Everything) buildQuery() string {
 	if e == (Everything{}) {
 		return query
 	}
-	// see if it's possible to keep it DRY by adding a for loop
 	if len(e.KeywordBody) > 0 {
 		query += "&q=" + e.KeywordBody
 	}

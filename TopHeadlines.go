@@ -18,31 +18,31 @@ type Headlines struct {
 	ApiKey   string
 }
 
-type HeadlinesResponse struct {
+type headlinesResponse struct {
 	Status       string    `json:"status"`
 	TotalResults int       `json:"totalResults"`
-	Articles     []Article `json:"articles"`
+	Articles     []article `json:"articles"`
 	Code         string    `json:"code"`
 	Message      string    `json:"message"`
 }
 
-func GetTopHeadlines(headlines Headlines) (HeadlinesResponse, error) {
+func GetTopHeadlines(headlines Headlines) (headlinesResponse, error) {
 	if len(headlines.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
 	response, err := http.Get(headlines.buildQuery())
 	if err != nil { // response error handling
-		return HeadlinesResponse{}, err
+		return headlinesResponse{}, err
 	}
 
 	body, readErr := ioutil.ReadAll(response.Body)
 
 	if readErr != nil {
-		return HeadlinesResponse{}, readErr
+		return headlinesResponse{}, readErr
 	}
 
-	headlinesResponse := HeadlinesResponse{}
+	headlinesResponse := headlinesResponse{}
 	headlinesErr := json.Unmarshal(body, &headlinesResponse)
 
 	if headlinesErr != nil {
@@ -62,7 +62,6 @@ func (h Headlines) buildQuery() string {
 	if h == (Headlines{}) {
 		return query
 	}
-	// see if it's possible to keep it DRY by adding a for loop
 	if len(h.Country) > 0 {
 		query += "&country=" + h.Country
 	}

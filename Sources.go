@@ -14,14 +14,14 @@ type Sources struct {
 	ApiKey   string
 }
 
-type SourcesResponse struct {
+type sourcesResponse struct {
 	Status         string         `json:"status"`
-	SourceResponse []SourceStruct `json:"sources"`
+	SourceResponse []sourceStruct `json:"sources"`
 	Code           string         `json:"code"`
 	Message        string         `json:"message"`
 }
 
-type SourceStruct struct {
+type sourceStruct struct {
 	Id          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -31,7 +31,7 @@ type SourceStruct struct {
 	Country     string `json:"country"`
 }
 
-func GetSources(sources Sources) (SourcesResponse, error) {
+func GetSources(sources Sources) (sourcesResponse, error) {
 
 	if len(sources.ApiKey) == 0 {
 		fmt.Println("Missing api key")
@@ -39,16 +39,16 @@ func GetSources(sources Sources) (SourcesResponse, error) {
 
 	response, err := http.Get(sources.buildQuery())
 	if err != nil {
-		return SourcesResponse{}, err
+		return sourcesResponse{}, err
 	}
 
 	body, readErr := ioutil.ReadAll(response.Body)
 
 	if readErr != nil {
-		return SourcesResponse{}, readErr
+		return sourcesResponse{}, readErr
 	}
 
-	sourcesResponse := SourcesResponse{}
+	sourcesResponse := sourcesResponse{}
 	sourcesErr := json.Unmarshal(body, &sourcesResponse)
 
 	if sourcesErr != nil {
@@ -64,7 +64,6 @@ func (s Sources) buildQuery() string {
 	if (s == Sources{}) {
 		return query
 	}
-	// see if it's possible to keep it DRY by adding a for loop
 	if len(s.Category) > 0 {
 		query += "&category=" + s.Category
 	}
