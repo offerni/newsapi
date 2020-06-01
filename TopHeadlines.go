@@ -12,7 +12,7 @@ type Headlines struct {
 	Country  string
 	Category string
 	Sources  string
-	Keyword  string
+	Q        string
 	PageSize int
 	Page     int
 	ApiKey   string
@@ -71,8 +71,8 @@ func (h Headlines) buildQuery() string {
 	if len(h.Sources) > 0 {
 		query += "&sources=" + h.Sources
 	}
-	if len(h.Keyword) > 0 {
-		query += "&q=" + h.Keyword
+	if len(h.Q) > 0 {
+		query += "&q=" + h.Q
 	}
 	if h.PageSize > 0 {
 		query += "&pageSize=" + strconv.Itoa(h.PageSize)

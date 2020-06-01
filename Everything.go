@@ -9,13 +9,13 @@ import (
 )
 
 type Everything struct {
-	KeywordBody    string
-	KeywordTitle   string
+	Q              string
+	QInTitle       string
 	Sources        string
 	Domains        string
 	ExcludeDomains string
-	FromDate       string
-	ToDate         string
+	From           string
+	To             string
 	Language       string
 	SortBy         string
 	PageSize       int
@@ -67,11 +67,11 @@ func (e Everything) buildQuery() string {
 	if e == (Everything{}) {
 		return query
 	}
-	if len(e.KeywordBody) > 0 {
-		query += "&q=" + e.KeywordBody
+	if len(e.Q) > 0 {
+		query += "&q=" + e.Q
 	}
-	if len(e.KeywordTitle) > 0 {
-		query += "&qInTitle=" + e.KeywordTitle
+	if len(e.QInTitle) > 0 {
+		query += "&qInTitle=" + e.QInTitle
 	}
 	if len(e.Sources) > 0 {
 		query += "&sources=" + e.Sources
@@ -82,11 +82,11 @@ func (e Everything) buildQuery() string {
 	if len(e.ExcludeDomains) > 0 {
 		query += "&excludeDomains=" + e.ExcludeDomains
 	}
-	if len(e.FromDate) > 0 {
-		query += "&from=" + e.FromDate
+	if len(e.From) > 0 {
+		query += "&from=" + e.From
 	}
-	if len(e.ToDate) > 0 {
-		query += "&to=" + e.ToDate
+	if len(e.To) > 0 {
+		query += "&to=" + e.To
 	}
 	if len(e.Language) > 0 {
 		query += "&language=" + e.Language

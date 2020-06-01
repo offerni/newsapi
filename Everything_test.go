@@ -13,13 +13,13 @@ func TestEverythingBuildQuery(t *testing.T) {
 	assertEqual(t, result, expected)
 
 	everything = Everything{
-		KeywordBody:    "the oscars",
-		KeywordTitle:   "streaming",
+		Q:              "the oscars",
+		QInTitle:       "streaming",
 		Sources:        "rotten tomatoes",
 		Domains:        "rottentomatoes.com",
 		ExcludeDomains: "www.imdb.com",
-		FromDate:       "2020-05-31T00:34:00Z",
-		ToDate:         "2020-06-24T00:15:15Z",
+		From:           "2020-05-31T00:34:00Z",
+		To:             "2020-06-24T00:15:15Z",
 		Language:       "en",
 		SortBy:         "publishedAt",
 		PageSize:       10,
@@ -34,14 +34,14 @@ func TestEverythingBuildQuery(t *testing.T) {
 	assertEqual(t, result, expected)
 
 	everything = Everything{
-		KeywordBody:  "games",
-		KeywordTitle: "overwatch",
-		Sources:      "ign",
-		Language:     "en",
-		SortBy:       "relevancy",
-		PageSize:     5,
-		Page:         1,
-		ApiKey:       "qwerty123",
+		Q:        "games",
+		QInTitle: "overwatch",
+		Sources:  "ign",
+		Language: "en",
+		SortBy:   "relevancy",
+		PageSize: 5,
+		Page:     1,
+		ApiKey:   "qwerty123",
 	}
 	result = everything.buildQuery()
 	expected = "https://newsapi.org/v2/everything?apiKey=qwerty123&q=games&" +
