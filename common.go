@@ -1,7 +1,5 @@
 package newsapi
 
-import "testing"
-
 // Shared between all endpoints
 const baseUrl string = "https://newsapi.org/v2"
 
@@ -19,11 +17,4 @@ type article struct {
 type articleSource struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
-}
-
-// Assertion functions for unit tests
-func assertEqual(t *testing.T, result string, expected string) {
-	if result != expected {
-		t.Errorf("Incorrect Equals Assertion, expected: (%s), got: (%s)", expected, result)
-	}
 }

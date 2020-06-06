@@ -7,11 +7,10 @@ import (
 	"net/http"
 )
 
-type Sources struct {
+type SourcesOpts struct {
 	Category string
 	Language string
 	Country  string
-	ApiKey   string
 }
 
 type sourcesResponse struct {
@@ -31,13 +30,13 @@ type sourceStruct struct {
 	Country     string `json:"country"`
 }
 
-func GetSources(sources Sources) (sourcesResponse, error) {
+func (c *ClientOpts) GetSources(sources SourcesOpts) (sourcesResponse, error) {
 
-	if len(sources.ApiKey) == 0 {
+	if len(c.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
-	response, err := http.Get(sources.buildQuery())
+	response, err := http.Get(sources.buildQuery(c))
 	if err != nil {
 		return sourcesResponse{}, err
 	}
@@ -60,10 +59,10 @@ func GetSources(sources Sources) (sourcesResponse, error) {
 	return sourcesResponse, err
 }
 
-func (s Sources) buildQuery() string {
-	query := baseUrl + "/sources?apiKey=" + s.ApiKey
+func (s SourcesOpts) buildQuery(c *ClientOpts) string {
+	query := baseUrl + "/sources?apiKey=" + c.ApiKey
 
-	if (s == Sources{}) {
+	if (s == SourcesOpts{}) {
 		return query
 	}
 	if len(s.Category) > 0 {
