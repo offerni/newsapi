@@ -42,20 +42,20 @@ func GetSources(sources Sources) (sourcesResponse, error) {
 		return sourcesResponse{}, err
 	}
 
-	body, readErr := ioutil.ReadAll(response.Body)
+	body, err := ioutil.ReadAll(response.Body)
 
-	if readErr != nil {
-		return sourcesResponse{}, readErr
+	if err != nil {
+		return sourcesResponse{}, err
 	}
 
 	sourcesResponse := sourcesResponse{}
-	sourcesErr := json.Unmarshal(body, &sourcesResponse)
+	err = json.Unmarshal(body, &sourcesResponse)
 
-	if sourcesErr != nil {
-		return sourcesResponse, sourcesErr
+	if err != nil {
+		return sourcesResponse, err
 	}
 
-	return sourcesResponse, sourcesErr
+	return sourcesResponse, err
 }
 
 func (s Sources) buildQuery() string {

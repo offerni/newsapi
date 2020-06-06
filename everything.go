@@ -42,20 +42,20 @@ func GetEverything(everything Everything) (everythingResponse, error) {
 		return everythingResponse{}, err
 	}
 
-	body, readErr := ioutil.ReadAll(response.Body)
-	if readErr != nil {
-		return everythingResponse{}, readErr
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return everythingResponse{}, err
 	}
 
 	everythingResponse := everythingResponse{}
-	everythingErr := json.Unmarshal(body, &everythingResponse)
+	err = json.Unmarshal(body, &everythingResponse)
 
-	if everythingErr != nil {
-		return everythingResponse, everythingErr
+	if err != nil {
+		return everythingResponse, err
 	}
 
 	if everythingResponse.Status == "error" {
-		return everythingResponse, everythingErr
+		return everythingResponse, err
 	}
 
 	return everythingResponse, nil

@@ -36,21 +36,21 @@ func GetTopHeadlines(headlines Headlines) (headlinesResponse, error) {
 		return headlinesResponse{}, err
 	}
 
-	body, readErr := ioutil.ReadAll(response.Body)
+	body, err := ioutil.ReadAll(response.Body)
 
-	if readErr != nil {
-		return headlinesResponse{}, readErr
+	if err != nil {
+		return headlinesResponse{}, err
 	}
 
 	headlinesResponse := headlinesResponse{}
-	headlinesErr := json.Unmarshal(body, &headlinesResponse)
+	err = json.Unmarshal(body, &headlinesResponse)
 
-	if headlinesErr != nil {
-		return headlinesResponse, headlinesErr
+	if err != nil {
+		return headlinesResponse, err
 	}
 
 	if headlinesResponse.Status == "error" {
-		return headlinesResponse, headlinesErr
+		return headlinesResponse, err
 	}
 
 	return headlinesResponse, nil
