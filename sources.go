@@ -42,6 +42,8 @@ func GetSources(sources Sources) (sourcesResponse, error) {
 		return sourcesResponse{}, err
 	}
 
+	defer response.Body.Close()
+
 	body, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {

@@ -42,6 +42,8 @@ func GetEverything(everything Everything) (everythingResponse, error) {
 		return everythingResponse{}, err
 	}
 
+	defer response.Body.Close()
+
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return everythingResponse{}, err
