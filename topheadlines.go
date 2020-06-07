@@ -25,13 +25,13 @@ type headlinesResponse struct {
 	Message      string    `json:"message"`
 }
 
-func (c *ClientOpts) GetTopHeadlines(headlines TopHeadlinesOpts) (headlinesResponse, error) {
+func (c *ClientOpts) GetTopHeadlines(topHeadlinesOpts TopHeadlinesOpts) (headlinesResponse, error) {
 
 	if len(c.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
-	response, err := http.Get(headlines.buildQuery(c))
+	response, err := http.Get(topHeadlinesOpts.buildQuery(c))
 	if err != nil { // response error handling
 		return headlinesResponse{}, err
 	}

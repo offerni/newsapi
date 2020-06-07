@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-type Everything struct {
+type EverythingOpts struct {
 	Q              string
 	QInTitle       string
 	Sources        string
@@ -20,7 +20,6 @@ type Everything struct {
 	SortBy         string
 	PageSize       int
 	Page           int
-	ApiKey         string
 }
 
 type everythingResponse struct {
@@ -31,13 +30,13 @@ type everythingResponse struct {
 	Message      string    `json:"message"`
 }
 
-func GetEverything(everything Everything) (everythingResponse, error) {
+func (c *ClientOpts) GetEverything(everythingOpts EverythingOpts) (everythingResponse, error) {
 
-	if len(everything.ApiKey) == 0 {
+	if len(c.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
-	response, err := http.Get(everything.buildQuery())
+	response, err := http.Get(everythingOpts.buildQuery(c))
 	if err != nil {
 		return everythingResponse{}, err
 	}
@@ -63,10 +62,10 @@ func GetEverything(everything Everything) (everythingResponse, error) {
 	return everythingResponse, nil
 }
 
-func (e Everything) buildQuery() string {
-	query := baseUrl + "/everything?apiKey=" + e.ApiKey
+func (e EverythingOpts) buildQuery(c *ClientOpts) string {
+	query := baseUrl + "/everything?apiKey=" + c.ApiKey
 
-	if e == (Everything{}) {
+	if e == (EverythingOpts{}) {
 		return query
 	}
 	if len(e.Q) > 0 {

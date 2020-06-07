@@ -30,13 +30,13 @@ type sourceStruct struct {
 	Country     string `json:"country"`
 }
 
-func (c *ClientOpts) GetSources(sources SourcesOpts) (sourcesResponse, error) {
+func (c *ClientOpts) GetSources(sourcesOpts SourcesOpts) (sourcesResponse, error) {
 
 	if len(c.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
-	response, err := http.Get(sources.buildQuery(c))
+	response, err := http.Get(sourcesOpts.buildQuery(c))
 	if err != nil {
 		return sourcesResponse{}, err
 	}
