@@ -6,7 +6,7 @@ type ClientOpts struct {
 	ApiKey string
 }
 
-func (opts ClientOpts) Validate() error {
+func (opts ClientOpts) validate() error {
 	if len(opts.ApiKey) != 0 {
 		return nil
 	}
@@ -15,7 +15,7 @@ func (opts ClientOpts) Validate() error {
 }
 
 func NewClient(opts ClientOpts) (*ClientOpts, error) {
-	if err := opts.Validate(); err != nil {
+	if err := opts.validate(); err != nil {
 		return nil, err
 	}
 
