@@ -10,7 +10,6 @@ func TestSourcesBuildQuery(t *testing.T) {
 
 	result := sources.buildQuery(c)
 	expected := "https://newsapi.org/v2/sources?apiKey="
-
 	assertEqual(t, result, expected)
 
 	sources = SourcesOpts{
@@ -22,7 +21,6 @@ func TestSourcesBuildQuery(t *testing.T) {
 
 	result = sources.buildQuery(c)
 	expected = "https://newsapi.org/v2/sources?apiKey=qwerty123&category=entertainment&language=pt&country=br"
-
 	assertEqual(t, result, expected)
 
 	sources = SourcesOpts{
@@ -34,6 +32,5 @@ func TestSourcesBuildQuery(t *testing.T) {
 
 	result = sources.buildQuery(c)
 	expected = "https://newsapi.org/v2/sources?apiKey=&category=sports&language=en&country=us"
-
 	assertEqual(t, result, expected)
 }

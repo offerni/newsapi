@@ -8,14 +8,13 @@ import (
 	"strconv"
 )
 
-type Headlines struct {
+type TopHeadlinesOpts struct {
 	Country  string
 	Category string
 	Sources  string
 	Q        string
 	PageSize int
 	Page     int
-	ApiKey   string
 }
 
 type headlinesResponse struct {
@@ -26,12 +25,13 @@ type headlinesResponse struct {
 	Message      string    `json:"message"`
 }
 
-func GetTopHeadlines(headlines Headlines) (headlinesResponse, error) {
-	if len(headlines.ApiKey) == 0 {
+func (c *ClientOpts) GetTopHeadlines(headlines TopHeadlinesOpts) (headlinesResponse, error) {
+
+	if len(c.ApiKey) == 0 {
 		fmt.Println("Missing api key")
 	}
 
-	response, err := http.Get(headlines.buildQuery())
+	response, err := http.Get(headlines.buildQuery(c))
 	if err != nil { // response error handling
 		return headlinesResponse{}, err
 	}
@@ -58,29 +58,29 @@ func GetTopHeadlines(headlines Headlines) (headlinesResponse, error) {
 	return headlinesResponse, nil
 }
 
-func (h Headlines) buildQuery() string {
-	query := baseUrl + "/top-headlines?apiKey=" + h.ApiKey
+func (t TopHeadlinesOpts) buildQuery(c *ClientOpts) string {
+	query := baseUrl + "/top-headlines?apiKey=" + c.ApiKey
 
-	if h == (Headlines{}) {
+	if t == (TopHeadlinesOpts{}) {
 		return query
 	}
-	if len(h.Country) > 0 {
-		query += "&country=" + h.Country
+	if len(t.Country) > 0 {
+		query += "&country=" + t.Country
 	}
-	if len(h.Category) > 0 {
-		query += "&category=" + h.Category
+	if len(t.Category) > 0 {
+		query += "&category=" + t.Category
 	}
-	if len(h.Sources) > 0 {
-		query += "&sources=" + h.Sources
+	if len(t.Sources) > 0 {
+		query += "&sources=" + t.Sources
 	}
-	if len(h.Q) > 0 {
-		query += "&q=" + h.Q
+	if len(t.Q) > 0 {
+		query += "&q=" + t.Q
 	}
-	if h.PageSize > 0 {
-		query += "&pageSize=" + strconv.Itoa(h.PageSize)
+	if t.PageSize > 0 {
+		query += "&pageSize=" + strconv.Itoa(t.PageSize)
 	}
-	if h.Page > 0 {
-		query += "&page=" + strconv.Itoa(h.Page)
+	if t.Page > 0 {
+		query += "&page=" + strconv.Itoa(t.Page)
 	}
 
 	return query
